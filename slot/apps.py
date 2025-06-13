@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CenterConfig(AppConfig):
+class SlotConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "center"
+    name = "slot"

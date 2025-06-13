@@ -37,6 +37,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "vaccine.apps.VaccineConfig",
+    "user.apps.UserConfig",
+    "campaign.apps.CampaignConfig",
+    "center.apps.CenterConfig",
+    "vaccination.apps.VaccinationConfig",
+    "slot.apps.SlotConfig",
+    "storage.apps.StorageConfig"
 ]
 
 MIDDLEWARE = [
