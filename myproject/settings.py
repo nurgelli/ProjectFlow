@@ -41,9 +41,7 @@ INSTALLED_APPS = [
     "user.apps.UserConfig",
     "campaign.apps.CampaignConfig",
     "center.apps.CenterConfig",
-    "vaccination.apps.VaccinationConfig",
-    "slot.apps.SlotConfig",
-    "storage.apps.StorageConfig"
+    "vaccination.apps.VaccinationConfig"
 ]
 
 MIDDLEWARE = [
@@ -61,7 +59,7 @@ ROOT_URLCONF = "myproject.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
