@@ -4,7 +4,7 @@ from django.db import models
 
 class Task(models.Model):
     name = models.CharField(max_length=32)
-    description = models.TextField()
+    description = models.TextField(default='Description')
     until_time = models.DateTimeField(blank=True)
     done = models.BooleanField('Done')
     pending = models.BooleanField('Pending')
