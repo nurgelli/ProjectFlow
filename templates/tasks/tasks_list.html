@@ -5,10 +5,6 @@
     <li>
         <a href="{% url 'task_detail' task.id %}">{{ task.name }}</a>
     </li>
-    <li>
-        <p>{{task.description}}</p>
-        <p>{{task.until_time}}</p>
-    </li>
     <a href="{% url 'task_update' task.id %}">Edit</a>
     {% endfor %}
 </ul> 

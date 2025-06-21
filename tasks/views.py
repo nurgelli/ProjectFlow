@@ -12,8 +12,8 @@ def index(request):
     return render(request, 'tasks/pages/index.html', context)
 
 def tasks_list(request):
-    task = Task.objects.all()
-    return render(request, 'tasks/tasks_list.html', {'task': task})
+    tasks = Task.objects.all()
+    return render(request, 'tasks/tasks_list.html', {'tasks': tasks})
 
 def task_detail(request, id):
     # task = Task.objects.get(id=id)
@@ -28,7 +28,7 @@ def task_create(request):
         if form.is_valid():
             form.save()
             return redirect('tasks_list')
-    return render(request, 'tasks/task_create.html', {'task': form})
+    return render(request, 'tasks/task_create.html', {'form': form})
 
 
 def task_update(request, id):
@@ -38,11 +38,16 @@ def task_update(request, id):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
-        return redirect('task_detail')
+        return redirect('task_detail', id=task.id)
     return render(request, 'tasks/task_create.html', {'form': form})
 
 
-# def task_delete(request, id):
+def task_delete(request, id):
+    task = get_object_or_404(Task, id=id)
+    if request.method == "POST":
+        task.delete()
+        return redirect('tasks_list')
+    return render(request, 'tasks/confirm.html', {'task': task})
     
         
         
