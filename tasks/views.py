@@ -5,6 +5,12 @@ from .forms import TaskForm
 
 # Create your views here.
 
+def index(request):
+    context = {
+        "index": index
+    }
+    return render(request, 'tasks/pages/index.html', context)
+
 def tasks_list(request):
     task = Task.objects.all()
     return render(request, 'tasks/tasks_list.html', {'task': task})
