@@ -20,7 +20,6 @@ def task_detail(request, id):
     task = get_object_or_404(Task, id=id)
     return render(request, 'tasks/task_detail.html', {'task': task})
 
-
 def task_create(request):
     form = TaskForm()
     if request.method == "POST":
@@ -29,7 +28,6 @@ def task_create(request):
             form.save()
             return redirect('tasks_list')
     return render(request, 'tasks/task_create.html', {'form': form})
-
 
 def task_update(request, id):
     task = get_object_or_404(Task, id=id)
@@ -40,7 +38,6 @@ def task_update(request, id):
             form.save()
         return redirect('task_detail', id=task.id)
     return render(request, 'tasks/task_create.html', {'form': form})
-
 
 def task_delete(request, id):
     task = get_object_or_404(Task, id=id)
