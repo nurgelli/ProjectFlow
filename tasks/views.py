@@ -4,19 +4,14 @@ from .forms import TaskForm
 
 
 # Create your views here.
-
 def index(request):
-    context = {
-        "index": index
-    }
-    return render(request, 'tasks/pages/index.html', context)
+    return render(request, 'tasks/pages/index.html', contenxt = {'index': index})
 
 def tasks_list(request):
-    tasks = Task.objects.all()
-    return render(request, 'tasks/tasks_list.html', {'tasks': tasks})
+    task = Task.objects.all()
+    return render(request, 'tasks/tasks_list.html', {'tasks': task})
 
 def task_detail(request, id):
-    # task = Task.objects.get(id=id)
     task = get_object_or_404(Task, id=id)
     return render(request, 'tasks/task_detail.html', {'task': task})
 
@@ -27,7 +22,7 @@ def task_create(request):
         if form.is_valid():
             form.save()
             return redirect('tasks_list')
-    return render(request, 'tasks/task_create.html', {'form': form})
+    return render(request, 'tasks/task_create.html', {"form": form})
 
 def task_update(request, id):
     task = get_object_or_404(Task, id=id)
@@ -36,7 +31,7 @@ def task_update(request, id):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
-        return redirect('task_detail', id=task.id)
+            return redirect('task_detail', id=task.id)
     return render(request, 'tasks/task_create.html', {'form': form})
 
 def task_delete(request, id):
@@ -44,7 +39,4 @@ def task_delete(request, id):
     if request.method == "POST":
         task.delete()
         return redirect('tasks_list')
-    return render(request, 'tasks/confirm.html', {'task': task})
-    
-        
-        
+    return render(request, 'tasks/confirm.html', {"task": task})                                                                                                                                                                                                                      
