@@ -1,8 +1,11 @@
-from django import forms
-from .models import Task
+from django.forms import ModelForm
+from tasks.models import Task
 
 
-class TaskForm(forms.ModelForm):
+class TaskForm(ModelForm):
     class Meta:
         model = Task
-        fields = ['name', 'description', 'until_time', 'done', 'pending' ]
+        fields = ['name', 'description']
+        # fields = '__all__' if you want all fields
+        
+

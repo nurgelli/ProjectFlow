@@ -1,6 +1,5 @@
-<h2>{{ form.instance.id|yesno:"Edit Task,Add Task" }}</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form> 
+<form method='POST' action=''>
+{%csrf_token%}
+{{form.as_p}}
+<button type='submit'>Submit</button>
+</form>

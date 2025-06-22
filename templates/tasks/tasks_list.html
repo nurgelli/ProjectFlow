@@ -1,10 +1,11 @@
- <h2>Tasks</h2>
+ <h2>List of Tasks</h2>
 <a href="{% url 'task_create' %}">Add New Task</a>
 <ul>
     {% for task in tasks %}
     <li>
-        <a href="{% url 'task_detail' task.id %}">{{ task.name }}</a>
+        Name of Todo: <a href="{% url 'task_detail' task.id %}"> {{ task.name }}</a>
+        <a href="{% url 'task_update' task.id %}">Edit</a>
+        <hr>
     </li>
-    <a href="{% url 'task_update' task.id %}">Edit</a>
     {% endfor %}
 </ul> 

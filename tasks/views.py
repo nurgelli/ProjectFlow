@@ -16,13 +16,13 @@ def task_detail(request, id):
     return render(request, 'tasks/task_detail.html', {'task': task})
 
 def task_create(request):
-    form = TaskForm()
+    # form = TaskForm()
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('tasks_list')
-    return render(request, 'tasks/task_create.html', {"form": form})
+    return render(request, 'tasks/task_create.html', {"form": TaskForm()}) # Here u are sending form, it is easy to declare it 
 
 def task_update(request, id):
     task = get_object_or_404(Task, id=id)
