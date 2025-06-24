@@ -1,8 +1,0 @@
-
-{{task.name}}
-<form method="post" action="{% url 'task_delete' task.id %}">
-    {% csrf_token %}
-    <button type="submit">Delete</button>
-    <button><a href="{% url 'task_update' task.id %}">Edit</a></button>
-    <button><a href="{% url 'tasks_list' %}">All tasks</a></button>
- </form> 
