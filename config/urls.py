@@ -20,7 +20,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', include('tasks.urls', namespace='tasks')), # as a namespace for reverse function or reverse_lazy function for urls
     path('admin/', admin.site.urls)
 ]
 
