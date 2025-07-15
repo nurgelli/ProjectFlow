@@ -4,10 +4,48 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwner
 from django_filters.rest_framework import DjangoFilterBackend
 from .pagination import StandardResultsSetPagination
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
+from .models import Project, Task, SubTask, Tag, TaskTag, Comment, Attachment, Reminder, ActivityLog
+from .forms import TaskForm
 from .models import *
 from .serializers  import*
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
+# list projects
+class ProjectListView(LoginRequiredMixin, View):
+    def get(self, request):
+        projects = Project.objects.filter(user=request.user)
+        return render(request, 'dashboard/projects_list.html', {'projects': projects})
+
+# List all tasks in a project
+class TaskListView(LoginRequiredMixin, View):
+    def get(self, request, project_id):
+        project = get_object_or_404(Project, id=project_id, user=request.user)
+        tasks = project.tasks.all()
+        return render(request, 'dashboard/tasks_list.html', {'project': project, 'tasks': tasks})
+
+# create a new Task
+class TaskCreateView(LoginRequiredMixin, View):
+    def get(self, request, project_id):
+        form = TaskForm()
+        project = get_object_or_404(Project, id=project_id, user=request.user)
+        return render(request, 'dashboard/task_form.html', {'form': form, "project": project})
+    
+    def post(self, request, project_id):
+        form = TaskForm(request.POST)
+        project = get_object_or_404(Project, id=project_id, user=request.user)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.project = project
+            task.user = request.user
+            task.save()
+            return redirect('tasks-list', project_id=project.id)
+        return render(request, 'dashboard/task_form.html', {'form': form, 'project': project})
+
+
+# viewsets
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer

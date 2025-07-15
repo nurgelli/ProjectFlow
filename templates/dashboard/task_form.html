@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        
-        <script src="" async defer></script>
-    </body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Add Task to {{ project.name }}{% endblock %}
+
+{% block content %}
+<h2>Add Task to {{ project.name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Task</button>
+</form>
+
+<a href="{% url 'tasks-list' project.id %}">Back to Tasks</a>
+{% endblock %}
