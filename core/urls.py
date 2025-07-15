@@ -5,3 +5,16 @@ from .views import *
 router = DefaultRouter()
 
 router.register('projects', ProjectViewSet)
+router.register('tasks', TaskViewSet)
+router.register('subtasks', SubTaskViewSet)
+router.register('tags', TagViewSet)
+router.register('tasktags', TaskTagViewSet)
+router.register('comments', CommentViewSet)
+router.register('attachments', AttachmentViewSet)
+router.register('reminders', ReminderViewSet)
+router.register('activitylogs', ActivityLogViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)), 
+]
+
