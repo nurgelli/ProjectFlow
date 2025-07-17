@@ -11,26 +11,37 @@ from .forms import TaskForm
 from .models import *
 from .serializers  import*
 from django.contrib.auth.mixins import LoginRequiredMixin
-# Create your views here.
+from django.core.paginator import Paginator
+from rest_framework.renderers import JSONRenderer
+
+
+
+
 # list projects
 class ProjectListView(LoginRequiredMixin, View):
     def get(self, request):
-        projects = Project.objects.filter(user=request.user)
-        return render(request, 'dashboard/projects_list.html', {'projects': projects})
+        projects = Project.objects.filter(user=request.user).order_by('id')
+        paginator = Paginator(projects, 3)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'dashboard/projects_list.html', {'page_obj': page_obj})
 
 # List all tasks in a project
 class TaskListView(LoginRequiredMixin, View):
     def get(self, request, project_id):
         project = get_object_or_404(Project, id=project_id, user=request.user)
-        tasks = project.tasks.all()
-        return render(request, 'dashboard/tasks_list.html', {'project': project, 'tasks': tasks})
+        tasks = project.tasks.all().order_by('id')
+        paginator = Paginator(tasks, 3)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'dashboard/tasks_list.html', {'project': project, 'page_obj': page_obj})
 
 # create a new Task
 class TaskCreateView(LoginRequiredMixin, View):
     def get(self, request, project_id):
         form = TaskForm()
         project = get_object_or_404(Project, id=project_id, user=request.user)
-        return render(request, 'dashboard/task_form.html', {'form': form, "project": project})
+        return render(request, 'forms/task_form.html', {'form': form, "project": project})
     
     def post(self, request, project_id):
         form = TaskForm(request.POST)
@@ -41,16 +52,20 @@ class TaskCreateView(LoginRequiredMixin, View):
             task.user = request.user
             task.save()
             return redirect('tasks-list', project_id=project.id)
-        return render(request, 'dashboard/task_form.html', {'form': form, 'project': project})
+        return render(request, 'forms/task_form.html', {'form': form, 'project': project})
+
+
+
 
 
    
-# viewsets
+# api >> viewsets
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated, IsOwner]
+    # renderer_classes = [JSONRenderer]
     pagination_class = StandardResultsSetPagination
     
     

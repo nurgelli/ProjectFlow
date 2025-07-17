@@ -15,22 +15,28 @@ class AttachmentInline(admin.TabularInline):
     extra = 1
 class ReminderInline(admin.TabularInline):
     model = Reminder
-    extra =1 
+    extra = 1 
+
+class TaskInline(admin.TabularInline):
+    model = Task
+    extra = 1    
+    
 
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'user', 'created_at')
+    list_display = ('name', 'user', 'created_at')
     search_fields = ('name', "description")
     list_filter = ("created_at",)
     ordering = ('-created_at',)
+    # inlines = [TaskInline]
     
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'user', 'priority', 'due_date', 'is_completed')
-    list_filter = ('priority', 'is_completed', 'created_at')
-    search_fields = ('title', 'description')
+    list_display = ('title', 'project', 'user', 'priority', 'due_date', 'is_completed')
+    search_fields = ('title', 'priority', 'description')
+    list_filter = ('priority', 'is_completed', 'created_at', 'user')
     readonly_fields = ('created_at', 'updated_at')
     inlines = [SubTaskInline, CommentInline, AttachmentInline, ReminderInline ]
 
