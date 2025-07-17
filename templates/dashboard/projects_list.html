@@ -7,6 +7,8 @@
   {% for project in projects %}
   <li>
     <a href="{% url 'tasks-list' project.id %}">{{ project.name }}</a>
+    <p>{{ project.description }}</p>
+    <p>Created on: {{ project.created_at|date:"F j, Y" }}</p>
   </li>
   {% empty %}
   <li>No projects yet.</li>

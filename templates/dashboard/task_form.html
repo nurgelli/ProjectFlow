@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
-{% block title %}Add Task to {{ project.name }}{% endblock %}
+{% block title %} Add Task to {{ project.name }}{% endblock %}
 
 {% block content %}
-<h2>Add Task to {{ project.name }}</h2>
+<h2> Add Task to {{ project.name }}</h2>
 
 <form method="post">
     {% csrf_token %}
