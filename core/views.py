@@ -13,6 +13,7 @@ from .serializers  import*
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from rest_framework.renderers import JSONRenderer
+from django.contrib import messages
 
 
 
@@ -51,8 +52,16 @@ class TaskCreateView(LoginRequiredMixin, View):
             task.project = project
             task.user = request.user
             task.save()
+            messages.success(request, 'Task Created Successfully')
             return redirect('tasks-list', project_id=project.id)
+        messages.error(request, "Task not created-Failed!")
         return render(request, 'forms/task_form.html', {'form': form, 'project': project})
+
+
+
+
+
+
 
 
 
