@@ -4,7 +4,10 @@
 
 {% block content %}
 <h2 class="mb-4">Your Projects</h2>
-
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <a href="{% url 'project-create'%}" class="btn btn-success">➕ Add Project</a>
+</div>
+{% include "components/message.html" %}
 <div class="row">
   {% for project in page_obj %}
     <div class="col-md-4">

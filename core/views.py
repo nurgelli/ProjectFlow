@@ -1,24 +1,26 @@
 from django.shortcuts import render
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from .permissions import IsOwner
-from django_filters.rest_framework import DjangoFilterBackend
-from .pagination import StandardResultsSetPagination
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.core.paginator import Paginator
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django_filters.rest_framework import DjangoFilterBackend
+
+
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+
+from .permissions import IsOwner
+from .pagination import StandardResultsSetPagination
 from .models import Project, Task, SubTask, Tag, TaskTag, Comment, Attachment, Reminder, ActivityLog
-from .forms import TaskForm
+from .forms import TaskForm, ProjectForm
 from .models import *
 from .serializers  import*
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
-from rest_framework.renderers import JSONRenderer
-from django.contrib import messages
 
 
 
 
-# list projects
+# list all projects
 class ProjectListView(LoginRequiredMixin, View):
     def get(self, request):
         projects = Project.objects.filter(user=request.user).order_by('id')
@@ -26,6 +28,26 @@ class ProjectListView(LoginRequiredMixin, View):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         return render(request, 'dashboard/projects_list.html', {'page_obj': page_obj})
+    
+class ProjectCreateView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = ProjectForm()
+        return render(request, 'forms/project_form.html', {"form": form})
+    
+    def post(self, request):
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.user = request.user
+            project.save()
+            messages.success(request, "Project created successfully")
+            return redirect('projects-list')
+        messages.error("Project not created!")
+        return render(request, 'forms/project_form.html', {"form":form})     
+    
+    
+    
+    
 
 # List all tasks in a project
 class TaskListView(LoginRequiredMixin, View):
@@ -62,12 +84,6 @@ class TaskCreateView(LoginRequiredMixin, View):
 
 
 
-
-
-
-
-
-   
 # api >> viewsets
 
 class ProjectViewSet(viewsets.ModelViewSet):

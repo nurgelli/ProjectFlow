@@ -26,7 +26,7 @@
             <form action="{% url 'logout' %}" method="post">
                 
   { % csrf_token % }
-  <button type="submit">Logout</button>
+  <button type="submit" style='background-color:#00708F; border-radius:3px; color: white;'>Logout</button>
 </form>
             </li>
           {% else %}
@@ -48,7 +48,7 @@
   </main>
 
   <footer class="text-center mt-4">
-    <p>&copy; 2023 MyToDo App</p>
+    <p style="color:white;">&copy; 2023 MyToDo App</p>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
  
