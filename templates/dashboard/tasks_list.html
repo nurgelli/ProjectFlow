@@ -14,27 +14,28 @@
   {% for task in page_obj %}
     <li class="list-group-item d-flex justify-content-between align-items-center">
     
+      
+      
+      <span style='color: black; font-weight: bold' class="{% if task.is_completed %}task-done{% else %}task-pending{% endif %}">
+        {{ task.title }}
+        
+        
+        <small class="text-muted"> (due: {{ task.due_date|date:"M d, H:i" }})</small>
+        <small class="text-muted"> {{task.priority }}</small>
+        <form method="post" action="{% url 'task-delete' project.id task.id %}">
+          {% csrf_token %}
+          <button class='btn'> <a href="{% url 'task-update' project.id task.id %}"  style='color: #00708F'>Edit >></a> </button>
+          <button type="submit" class='btn' style='color: #00708F'>|  Delete</button>
+        </form>
+        
+      </span>
       <form action="{% url 'task-toggle' project.id task.id %}" method="post" style="display:inline;">
       {% csrf_token %}
       <label>
         <input type="checkbox" name='is_completed' onchange="this.form.submit()" {% if task.is_completed %} checked {% endif %}>
       </label>
-      {% if task.is_completed %} <span>Done</span> {% else %} Mark as Done{% endif %}
+      {% if task.is_completed %} <span>Undone</span> {% else %} Done {% endif %}
       </form>
-
-
-      <span class="{% if task.is_completed %}task-done{% else %}task-pending{% endif %}">
-        {{ task.title }}
-
-
-        <small class="text-muted"> (due: {{ task.due_date|date:"M d, H:i" }})</small>
-        <form method="post" action="{% url 'task-delete' project.id task.id %}">
-          {% csrf_token %}
-          <a href="{% url 'task-update' project.id task.id %}" class='btn btn-sm' style='color: #00708F'>Edit >></a> 
-          <button type="submit" class='btn' style='color: #00708F'>|  Delete</button>
-        </form>
-
-      </span>
       {% if task.is_completed %}
         <span class="badge bg-success">Done</span>
       {% else %}
