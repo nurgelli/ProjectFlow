@@ -1,17 +1,17 @@
-<div class="pagination">
-    <span class="step-links">
+<div class="pagination" style="display: flex; justify-content: center; margin: 30px 0; font-family: 'Fira Sans', sans-serif;">
+    <span class="step-links" style="display: inline-flex; gap: 10px; align-items: center; background-color: #f9f9f9; padding: 12px 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
         {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            <a href="?page=1" style="color: #00708F; text-decoration: none; padding: 8px 14px; border: 1px solid #ddd; border-radius: 6px; background-color: white; transition: all 0.3s ease; font-size: 14px;">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}" style="color: #00708F; text-decoration: none; padding: 8px 14px; border: 1px solid #ddd; border-radius: 6px; background-color: white; transition: all 0.3s ease; font-size: 14px;">previous</a>
         {% endif %}
 
-        <span class="current">
+        <span class="current" style="font-weight: bold; color: #333; background-color: #e0e9e8; padding: 8px 14px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px;">
             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
         </span>
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            <a href="?page={{ page_obj.next_page_number }}" style="color: #00708F; text-decoration: none; padding: 8px 14px; border: 1px solid #ddd; border-radius: 6px; background-color: white; transition: all 0.3s ease; font-size: 14px;">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" style="color: #00708F; text-decoration: none; padding: 8px 14px; border: 1px solid #ddd; border-radius: 6px; background-color: white; transition: all 0.3s ease; font-size: 14px;">last &raquo;</a>
         {% endif %}
     </span>
 </div>

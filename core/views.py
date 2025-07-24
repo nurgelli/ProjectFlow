@@ -20,11 +20,17 @@ from .serializers  import*
 
 
 
-# list all projects
+# Home page
+
+def home_view(request):
+    return render(request, "home.html")
+
+
+# Projects
 class ProjectListView(LoginRequiredMixin, View):
     def get(self, request):
         projects = Project.objects.filter(user=request.user).order_by('id')
-        paginator = Paginator(projects, 3)
+        paginator = Paginator(projects, 6)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         return render(request, 'dashboard/projects_list.html', {'page_obj': page_obj})
@@ -45,16 +51,38 @@ class ProjectCreateView(LoginRequiredMixin, View):
         messages.error("Project not created!")
         return render(request, 'forms/project_form.html', {"form":form})     
     
+class ProjectUpdateView(LoginRequiredMixin, View):
+    def get(self, request, id):
+        project = get_object_or_404(Project, id=id, user=request.user)
+        form = ProjectForm(instance=project)
+        return render(request, 'forms/project_form.html', {"form": form, "project": project})    
+    
+    def post(self, request, id):
+        project = get_object_or_404(Project, id=id, user=request.user)
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Project Updated!")
+            return redirect('projects-list')
+        
+        messages.error(request, "Failed to update project!")
+        return render(request, 'forms/project_form.html', {"form": form, "project": project })
     
     
-    
+class ProjectDeleteView(LoginRequiredMixin, View):
+    def post(self, request, id):
+        project = get_object_or_404(Project, id=id, user=request.user)
+        project.delete()
+        messages.success(request, "Project deleted successfully!")
+        return redirect('projects-list')
+         
 
-# List all tasks in a project
+# Tasks
 class TaskListView(LoginRequiredMixin, View):
     def get(self, request, project_id):
         project = get_object_or_404(Project, id=project_id, user=request.user)
         tasks = project.tasks.all().order_by('id')
-        paginator = Paginator(tasks, 3)
+        paginator = Paginator(tasks, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         return render(request, 'dashboard/tasks_list.html', {'project': project, 'page_obj': page_obj})
@@ -80,8 +108,48 @@ class TaskCreateView(LoginRequiredMixin, View):
         return render(request, 'forms/task_form.html', {'form': form, 'project': project})
 
 
+class TaskUpdateView(LoginRequiredMixin, View):
+    def get(self, request, project_id, task_id):
+        project = get_object_or_404(Project, id=project_id, user=request.user)
+        task = get_object_or_404(Task, id=task_id, project=project)       
+        form = TaskForm(instance=task)
+        return render(request, 'forms/task_form.html', {'form': form, "project": project, "task": task})
+
+    def post(self, request, project_id, task_id):
+        project = get_object_or_404(Project, id=project_id, user=request.user)
+        task = get_object_or_404(Task, id=task_id, project=project)    
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Task updated successfully!")
+            return redirect('tasks-list', project_id=project.id)
+        messages.error(request, 'Failed update task1')
+        return render(request, 'forms/task_form.html', {"form": form, "project": project, "task": task})
 
 
+class TaskToggleDoneView(LoginRequiredMixin, View):
+    def post(self, request, project_id, task_id):
+        project = get_object_or_404(Project, id=project_id, user=request.user)
+        task = get_object_or_404(Task, id=task_id, project=project)
+        task.is_completed = not task.is_completed
+        task.save()
+        return redirect('tasks-list', project_id=task.project.id)
+    
+
+class TaskDeleteView(LoginRequiredMixin, View):
+    def get(self, request, project_id, task_id):
+        project = get_object_or_404(Project, id=project_id, user=request.user)
+        task = get_object_or_404(Task, id=task_id, project=project)
+        return redirect(request, 'tasks-list', {'project': project, "task": task})
+    def post(self, request, project_id, task_id):
+        project = get_object_or_404(Project, id=project_id, user=request.user)
+        task = get_object_or_404(Task, id=task_id, project=project)
+        task.delete()
+        messages.success(request, "Task deleted successfully!")
+        return redirect('tasks-list', project_id=project.id)
+    
+    
+    
 
 
 # api >> viewsets
